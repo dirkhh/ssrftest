@@ -46,7 +46,7 @@ void run_ui()
 
 	QQmlApplicationEngine engine;
 	KirigamiPlugin::getInstance().registerTypes();
-#if __APPLE__
+#if defined(__APPLE__) && !defined(Q_OS_IOS)
 	// when running the QML UI on a Mac the deployment of the QML Components seems
 	// to fail and the search path for the components is rather odd - simply the
 	// same directory the executable was started from <bundle>/Contents/MacOS/
@@ -90,6 +90,11 @@ void run_ui()
 	ctxt->setContextProperty("logModel", MessageHandlerModel::self());
 
 	engine.load(QUrl(QStringLiteral("qrc:///qml/main.qml")));
+    connect(&engine, &QQmlApplicationEngine::objectCreated(<#QObject *object#>, <#const QUrl &url#>), this, )
+    QList<QObject*> rol = engine.rootObjects();
+    if (rol.length() == 0) {
+        qDebug() << "no rootObjects";
+    }
 	qqWindowObject = engine.rootObjects().value(0);
 	if (!qqWindowObject) {
 		fprintf(stderr, "can't create window object\n");
